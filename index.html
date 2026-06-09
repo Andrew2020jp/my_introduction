@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +30,7 @@
       justify-content: center;
       gap: 30px;
       padding: 14px;
+      flex-wrap: wrap;
     }
 
     nav a {
@@ -99,7 +100,7 @@
 
     table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
     td { padding: 10px 6px; border-bottom: 1px solid #eee; vertical-align: top; }
-    td:first-child { width: 110px; color: #888; white-space: nowrap; }
+    td:first-child { width: 120px; color: #888; white-space: nowrap; }
 
     .pub {
       border-left: 3px solid #e94560;
@@ -111,7 +112,11 @@
     .pub .venue { font-size: 0.85rem; color: #666; margin-top: 4px; }
 
     .links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
-    .links a {
+
+    .icon-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
       color: #1a1a2e;
       text-decoration: none;
       font-size: 0.9rem;
@@ -120,7 +125,8 @@
       border-radius: 4px;
       transition: background 0.2s;
     }
-    .links a:hover { background: #1a1a2e; color: white; }
+    .icon-link:hover { background: #1a1a2e; color: white; }
+    .icon-link svg { flex-shrink: 0; }
 
     footer {
       text-align: center;
@@ -133,40 +139,108 @@
       .profile-grid { grid-template-columns: 1fr; }
       .avatar { margin: 0 auto; }
     }
+
+    /* ── Dark mode ── */
+    body.dark { background: #121212; color: #e0e0e0; }
+    body.dark section { background: #1e1e1e; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    body.dark h2 { color: #e94560; }
+    body.dark td { border-bottom-color: #333; }
+    body.dark td:first-child { color: #aaa; }
+    body.dark .pub { background: #252525; }
+    body.dark .pub .venue { color: #aaa; }
+    body.dark .tag { background: #2a2a2a; color: #ccc; }
+    body.dark .icon-link { color: #e0e0e0; border-color: #555; }
+    body.dark .icon-link:hover { background: #e94560; border-color: #e94560; color: #fff; }
+    body.dark footer { color: #666; }
+    body.dark .bio .affil { color: #aaa; }
+
+    /* ── Language toggle ── */
+    .lang-en { display: none; }
+    body.en .lang-ja { display: none; }
+    body.en span.lang-en   { display: inline; }
+    body.en div.lang-en    { display: block; }
+    body.en p.lang-en      { display: block; }
+    body.en ul.lang-en     { display: block; }
+
+    /* ── Control buttons (fixed top-right) ── */
+    .ctrl-btns {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      background: #e94560;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .ctrl-btn:hover { background: #c73652; }
   </style>
 </head>
 <body>
 
+<!-- Control buttons -->
+<div class="ctrl-btns">
+  <button class="ctrl-btn" onclick="toggleLang()" id="langBtn">EN</button>
+  <button class="ctrl-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+</div>
+
 <header>
   <h1>Andrew Wong Wey Chee</h1>
-  <p>奈良先端科学技術大学院大学 (NAIST) &nbsp;|&nbsp; 修士課程</p>
+  <p>
+    <span class="lang-ja">奈良先端科学技術大学院大学 (NAIST) &nbsp;|&nbsp; 修士課程</span>
+    <span class="lang-en">Nara Institute of Science and Technology (NAIST) &nbsp;|&nbsp; Master's Program</span>
+  </p>
 </header>
 
 <nav>
   <a href="#about">About</a>
-  <a href="#education">学歴</a>
-  <a href="#research">研究</a>
-  <a href="#publications">論文</a>
-  <a href="#awards">受賞</a>
-  <a href="#contact">連絡先</a>
+  <a href="#education"><span class="lang-ja">学歴</span><span class="lang-en">Education</span></a>
+  <a href="#research"><span class="lang-ja">研究</span><span class="lang-en">Research</span></a>
+  <a href="#publications"><span class="lang-ja">論文</span><span class="lang-en">Publications</span></a>
+  <a href="#awards"><span class="lang-ja">受賞</span><span class="lang-en">Awards</span></a>
+  <a href="#contact"><span class="lang-ja">連絡先</span><span class="lang-en">Contact</span></a>
 </nav>
 
 <div class="container">
 
   <!-- About -->
   <section id="about">
-    <h2>About Me &nbsp; 自己紹介</h2>
+    <h2>
+      <span class="lang-ja">About Me &nbsp; 自己紹介</span>
+      <span class="lang-en">About Me</span>
+    </h2>
     <div class="profile-grid">
       <div class="avatar"><img src="profile.png" alt="Andrew Wong"></div>
       <div class="bio">
         <h3>Andrew Wong Wey Chee</h3>
         <div class="affil">
-          奈良先端科学技術大学院大学<br>
-          情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          <div class="lang-ja">
+            奈良先端科学技術大学院大学<br>
+            情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          </div>
+          <div class="lang-en">
+            Nara Institute of Science and Technology (NAIST)<br>
+            Division of Information Science, Master's Program &nbsp;|&nbsp; Software Engineering Lab
+          </div>
         </div>
-        <p>
+        <p class="lang-ja">
           ソフトウェア工学と大規模言語モデル（LLM）の応用に興味を持っています。
           特に、LLMを活用したコード解析・バグ検出・自動プログラム修復の研究に取り組んでいます。
+        </p>
+        <p class="lang-en">
+          I am interested in software engineering and the application of large language models (LLMs).
+          My research focuses on code analysis, bug detection, and automated program repair using LLMs.
         </p>
         <div style="margin-top: 12px;">
           <span class="tag">Software Engineering</span>
@@ -180,94 +254,170 @@
 
   <!-- Education -->
   <section id="education">
-    <h2>学歴 Education</h2>
+    <h2>
+      <span class="lang-ja">学歴 Education</span>
+      <span class="lang-en">Education</span>
+    </h2>
     <table>
       <tr>
-        <td>2026/04 – 現在</td>
+        <td>2026/04 – <span class="lang-ja">現在</span><span class="lang-en">Present</span></td>
         <td>
-          <strong>奈良先端科学技術大学院大学（NAIST）</strong><br>
-          情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          <div class="lang-ja">
+            <strong>奈良先端科学技術大学院大学（NAIST）</strong><br>
+            情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          </div>
+          <div class="lang-en">
+            <strong>Nara Institute of Science and Technology (NAIST)</strong><br>
+            Division of Information Science, Master's Program &nbsp;|&nbsp; Software Engineering Lab
+          </div>
         </td>
       </tr>
       <tr>
         <td>2022/04 – 2026/03</td>
         <td>
-          <strong>福井工業大学</strong><br> 
-          工学部 電気電子工学科 学士 &nbsp;|&nbsp; 大下研究室
+          <div class="lang-ja">
+            <strong>福井工業大学</strong><br>
+            工学部 電気電子工学科 学士 &nbsp;|&nbsp; 大下研究室
+          </div>
+          <div class="lang-en">
+            <strong>Fukui University of Technology</strong><br>
+            Faculty of Engineering, Dept. of Electrical &amp; Electronic Engineering, B.Eng. &nbsp;|&nbsp; Oshita Lab
+          </div>
         </td>
       </tr>
       <tr>
         <td>2020/10 – 2022/03</td>
         <td>
-          <strong>ABK学館日本語学校</strong><br>
-          一般課程（進学・就職・生活・資格取得等）
+          <div class="lang-ja">
+            <strong>ABK学館日本語学校</strong><br>
+            一般課程（進学・就職・生活・資格取得等）
+          </div>
+          <div class="lang-en">
+            <strong>ABK Gakkan Japanese Language School</strong><br>
+            General Course (University Preparation, Employment, etc.)
+          </div>
         </td>
       </tr>
       <tr>
         <td>2017/01 – 2019/12</td>
         <td>
-          <strong>Jit Sin Independent High School</strong>（日新獨立中學）<br>
-          商業科（Business Stream）
+          <div class="lang-ja">
+            <strong>Jit Sin Independent High School</strong>（日新獨立中學）<br>
+            商業科（Business Stream）
+          </div>
+          <div class="lang-en">
+            <strong>Jit Sin Independent High School</strong> (日新獨立中學)<br>
+            Business Stream
+          </div>
         </td>
       </tr>
     </table>
-    <h2 style="margin-top: 24px;">資格 Qualifications</h2>
+
+    <h2 style="margin-top: 24px;">
+      <span class="lang-ja">資格 Qualifications</span>
+      <span class="lang-en">Qualifications</span>
+    </h2>
     <table>
       <tr>
         <td>IT</td>
-        <td>基本情報技術者</td>
+        <td>
+          <span class="lang-ja">基本情報技術者</span>
+          <span class="lang-en">Fundamental Information Technology Engineer (FE Exam)</span>
+        </td>
       </tr>
       <tr>
-        <td>英語</td>
+        <td><span class="lang-ja">英語</span><span class="lang-en">English</span></td>
         <td>TOEIC 805</td>
       </tr>
       <tr>
-        <td>日本語</td>
-        <td>日本語能力試験 N1</td>
+        <td><span class="lang-ja">日本語</span><span class="lang-en">Japanese</span></td>
+        <td>
+          <span class="lang-ja">日本語能力試験 N1</span>
+          <span class="lang-en">Japanese Language Proficiency Test N1 (JLPT N1)</span>
+        </td>
       </tr>
     </table>
   </section>
 
   <!-- Research -->
   <section id="research">
-    <h2>研究内容 Research</h2>
-    <p>
+    <h2>
+      <span class="lang-ja">研究内容 Research</span>
+      <span class="lang-en">Research</span>
+    </h2>
+    <p class="lang-ja">
       大規模言語モデル（LLM）をソフトウェア工学タスクに応用する研究を行っています。
       現在の主なテーマは以下の通りです：
     </p>
-    <ul style="margin-top: 14px; padding-left: 20px; font-size: 0.95rem; line-height: 2;">
+    <p class="lang-en">
+      I conduct research on applying large language models (LLMs) to software engineering tasks.
+      My current main research topics are:
+    </p>
+    <ul class="lang-ja" style="margin-top: 14px; padding-left: 20px; font-size: 0.95rem; line-height: 2;">
       <li>LLMによる故障箇所の特定（Fault Localization）</li>
       <li>入力順序がLLMの推論精度に与える影響</li>
       <li>自動プログラム修復（Automatic Program Repair）</li>
+    </ul>
+    <ul class="lang-en" style="margin-top: 14px; padding-left: 20px; font-size: 0.95rem; line-height: 2;">
+      <li>Fault Localization using LLMs</li>
+      <li>Impact of input ordering on LLM reasoning accuracy</li>
+      <li>Automatic Program Repair (APR)</li>
     </ul>
   </section>
 
   <!-- Publications -->
   <section id="publications">
-    <h2>論文 Publications</h2>
+    <h2>
+      <span class="lang-ja">論文 Publications</span>
+      <span class="lang-en">Publications</span>
+    </h2>
     <div class="pub">
-      <div class="title">論文タイトル</div>
-      <div class="venue">会議名・雑誌名・年度</div>
+      <div class="title">
+        <span class="lang-ja">論文タイトル</span>
+        <span class="lang-en">Paper Title</span>
+      </div>
+      <div class="venue">
+        <span class="lang-ja">会議名・雑誌名・年度</span>
+        <span class="lang-en">Conference / Journal / Year</span>
+      </div>
     </div>
-    <p style="font-size: 0.88rem; color: #999;">※ 論文が出たら追加予定</p>
+    <p style="font-size: 0.88rem; color: #999;">
+      <span class="lang-ja">※ 論文が出たら追加予定</span>
+      <span class="lang-en">* To be updated when papers are published.</span>
+    </p>
   </section>
 
   <!-- Awards -->
   <section id="awards">
-    <h2>受賞・奨学金 Awards &amp; Scholarships</h2>
+    <h2>
+      <span class="lang-ja">受賞・奨学金 Awards &amp; Scholarships</span>
+      <span class="lang-en">Awards &amp; Scholarships</span>
+    </h2>
     <table>
       <tr>
         <td>2025</td>
         <td>
-          <strong>電子情報通信学会 北陸支部 優秀学生賞</strong><br>
-          IEICE Hokuriku Branch Outstanding Student Award
+          <div class="lang-ja">
+            <strong>電子情報通信学会 北陸支部 優秀学生賞</strong><br>
+            IEICE Hokuriku Branch Outstanding Student Award
+          </div>
+          <div class="lang-en">
+            <strong>IEICE Hokuriku Branch Outstanding Student Award</strong><br>
+            The Institute of Electronics, Information and Communication Engineers
+          </div>
         </td>
       </tr>
       <tr>
         <td>2025</td>
         <td>
-          <strong>ロータリー米山記念奨学金</strong><br>
-          Rotary Yoneyama Memorial Scholarship
+          <div class="lang-ja">
+            <strong>ロータリー米山記念奨学金</strong><br>
+            Rotary Yoneyama Memorial Scholarship
+          </div>
+          <div class="lang-en">
+            <strong>Rotary Yoneyama Memorial Scholarship</strong><br>
+            Rotary Club of Japan
+          </div>
         </td>
       </tr>
     </table>
@@ -275,19 +425,43 @@
 
   <!-- Contact -->
   <section id="contact">
-    <h2>連絡先 Contact</h2>
+    <h2>
+      <span class="lang-ja">連絡先 Contact</span>
+      <span class="lang-en">Contact</span>
+    </h2>
     <table>
       <tr>
-        <td>メール</td>
+        <td><span class="lang-ja">メール</span><span class="lang-en">Email</span></td>
         <td>andrew.wong_wey_chee.au4@naist.ac.jp</td>
       </tr>
       <tr>
-        <td>所属</td>
-        <td>奈良先端科学技術大学院大学</td>
+        <td><span class="lang-ja">所属</span><span class="lang-en">Affiliation</span></td>
+        <td>
+          <span class="lang-ja">奈良先端科学技術大学院大学</span>
+          <span class="lang-en">Nara Institute of Science and Technology (NAIST)</span>
+        </td>
       </tr>
     </table>
     <div class="links" style="margin-top: 20px;">
-      <a href="https://github.com/Andrew2020jp">GitHub</a>
+      <a class="icon-link" href="https://github.com/Andrew2020jp" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        GitHub
+      </a>
+      <a class="icon-link" href="mailto:andrew.wong_wey_chee.au4@naist.ac.jp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <polyline points="2,4 12,13 22,4"/>
+        </svg>
+        Email
+      </a>
+      <a class="icon-link" href="https://www.linkedin.com/in/andrew-wong-wey-chee-487233397/" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.447 20.452H16.89v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a1.98 1.98 0 0 1-1.98-1.98c0-1.093.887-1.98 1.98-1.98s1.98.887 1.98 1.98a1.98 1.98 0 0 1-1.98 1.98zm1.956 13.019H3.379V9h3.914v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        LinkedIn
+      </a>
     </div>
   </section>
 
@@ -296,6 +470,19 @@
 <footer>
   &copy; 2026 Andrew Wong Wey Chee &nbsp;|&nbsp; NAIST
 </footer>
+
+<script>
+  function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark');
+    document.getElementById('themeBtn').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+  }
+
+  function toggleLang() {
+    const isEn = document.body.classList.toggle('en');
+    document.getElementById('langBtn').textContent = isEn ? 'JP' : 'EN';
+    document.getElementById('htmlRoot').lang = isEn ? 'en' : 'ja';
+  }
+</script>
 
 </body>
 </html>
