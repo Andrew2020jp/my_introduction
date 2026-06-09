@@ -218,6 +218,18 @@
     body.en p.lang-en    { display: block; }
     body.en ul.lang-en   { display: block; }
 
+    /* ── Scroll progress bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #e94560, #ff7f50);
+      z-index: 1000;
+      transition: width 0.1s linear;
+    }
+
     /* ── Control buttons ── */
     .ctrl-btns {
       position: fixed;
@@ -243,6 +255,8 @@
   </style>
 </head>
 <body>
+
+<div id="progress-bar"></div>
 
 <div class="ctrl-btns">
   <button class="ctrl-btn" onclick="toggleLang()" id="langBtn">EN</button>
@@ -616,6 +630,13 @@
     document.getElementById('langBtn').textContent = isEn ? 'JP' : 'EN';
     document.getElementById('htmlRoot').lang = isEn ? 'en' : 'ja';
   }
+
+  /* ── Scroll progress bar ── */
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progress-bar').style.width = (scrolled / total * 100) + '%';
+  });
 
   /* ── Fade-in on scroll ── */
   const observer = new IntersectionObserver((entries) => {
