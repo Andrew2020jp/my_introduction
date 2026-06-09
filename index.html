@@ -20,7 +20,6 @@
       padding: 60px 20px;
       text-align: center;
     }
-
     header h1 { font-size: 2.2rem; margin-bottom: 8px; }
     header p  { font-size: 1rem; color: #aaa; }
 
@@ -28,11 +27,10 @@
       background: #16213e;
       display: flex;
       justify-content: center;
-      gap: 30px;
+      gap: 24px;
       padding: 14px;
       flex-wrap: wrap;
     }
-
     nav a {
       color: #ccc;
       text-decoration: none;
@@ -47,12 +45,20 @@
       padding: 0 20px;
     }
 
+    /* ── Fade-in animation ── */
     section {
       background: white;
       border-radius: 8px;
       padding: 32px;
       margin-bottom: 24px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     h2 {
@@ -69,7 +75,6 @@
       gap: 24px;
       align-items: start;
     }
-
     .avatar {
       width: 130px;
       height: 130px;
@@ -81,9 +86,7 @@
       font-size: 3rem;
       overflow: hidden;
     }
-
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
     .bio h3 { font-size: 1.4rem; margin-bottom: 4px; }
     .bio .affil { color: #666; font-size: 0.9rem; margin-bottom: 12px; }
     .bio p { font-size: 0.95rem; }
@@ -112,7 +115,6 @@
     .pub .venue { font-size: 0.85rem; color: #666; margin-top: 4px; }
 
     .links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
-
     .icon-link {
       display: inline-flex;
       align-items: center;
@@ -140,6 +142,54 @@
       .avatar { margin: 0 auto; }
     }
 
+    /* ── Skills ── */
+    .skill-group { margin-bottom: 18px; }
+    .skill-group:last-child { margin-bottom: 0; }
+    .skill-group-label {
+      font-size: 0.78rem;
+      color: #999;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .skill-tag {
+      display: inline-block;
+      padding: 4px 13px;
+      border-radius: 20px;
+      font-size: 0.83rem;
+      margin: 3px 4px 3px 0;
+      font-weight: 500;
+    }
+    .skill-tag.blue   { background: #e8f0fe; color: #1a56db; }
+    .skill-tag.green  { background: #e6f4ea; color: #1a7b34; }
+    .skill-tag.orange { background: #fff3e0; color: #d4600a; }
+
+    /* ── Languages ── */
+    .lang-grid { display: grid; gap: 14px; }
+    .lang-item {
+      display: grid;
+      grid-template-columns: 140px 1fr 90px;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.93rem;
+    }
+    .lang-name { font-weight: 600; }
+    .lang-bar-bg {
+      background: #e8e8e8;
+      border-radius: 10px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .lang-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #e94560, #c0304a);
+      width: 0;
+      transition: width 0.9s cubic-bezier(.4,0,.2,1);
+    }
+    .lang-level { font-size: 0.82rem; color: #888; text-align: right; }
+
     /* ── Dark mode ── */
     body.dark { background: #121212; color: #e0e0e0; }
     body.dark section { background: #1e1e1e; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
@@ -153,16 +203,22 @@
     body.dark .icon-link:hover { background: #e94560; border-color: #e94560; color: #fff; }
     body.dark footer { color: #666; }
     body.dark .bio .affil { color: #aaa; }
+    body.dark .skill-tag.blue   { background: #1e3a5f; color: #7eb3f7; }
+    body.dark .skill-tag.green  { background: #1a3d2a; color: #6bcf87; }
+    body.dark .skill-tag.orange { background: #3d2a0f; color: #f7b267; }
+    body.dark .skill-group-label { color: #666; }
+    body.dark .lang-bar-bg { background: #333; }
+    body.dark .lang-level { color: #777; }
 
     /* ── Language toggle ── */
     .lang-en { display: none; }
     body.en .lang-ja { display: none; }
-    body.en span.lang-en   { display: inline; }
-    body.en div.lang-en    { display: block; }
-    body.en p.lang-en      { display: block; }
-    body.en ul.lang-en     { display: block; }
+    body.en span.lang-en { display: inline; }
+    body.en div.lang-en  { display: block; }
+    body.en p.lang-en    { display: block; }
+    body.en ul.lang-en   { display: block; }
 
-    /* ── Control buttons (fixed top-right) ── */
+    /* ── Control buttons ── */
     .ctrl-btns {
       position: fixed;
       top: 16px;
@@ -171,7 +227,6 @@
       display: flex;
       gap: 8px;
     }
-
     .ctrl-btn {
       background: #e94560;
       color: white;
@@ -189,7 +244,6 @@
 </head>
 <body>
 
-<!-- Control buttons -->
 <div class="ctrl-btns">
   <button class="ctrl-btn" onclick="toggleLang()" id="langBtn">EN</button>
   <button class="ctrl-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
@@ -206,6 +260,8 @@
 <nav>
   <a href="#about">About</a>
   <a href="#education"><span class="lang-ja">学歴</span><span class="lang-en">Education</span></a>
+  <a href="#skills"><span class="lang-ja">スキル</span><span class="lang-en">Skills</span></a>
+  <a href="#languages"><span class="lang-ja">言語</span><span class="lang-en">Languages</span></a>
   <a href="#research"><span class="lang-ja">研究</span><span class="lang-en">Research</span></a>
   <a href="#publications"><span class="lang-ja">論文</span><span class="lang-en">Publications</span></a>
   <a href="#awards"><span class="lang-ja">受賞</span><span class="lang-en">Awards</span></a>
@@ -338,6 +394,81 @@
         </td>
       </tr>
     </table>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <h2>
+      <span class="lang-ja">スキル・技術スタック</span>
+      <span class="lang-en">Skills &amp; Tech Stack</span>
+    </h2>
+
+    <div class="skill-group">
+      <div class="skill-group-label">
+        <span class="lang-ja">プログラミング言語</span>
+        <span class="lang-en">Programming Languages</span>
+      </div>
+      <span class="skill-tag blue">Python</span>
+      <span class="skill-tag blue">Java</span>
+      <span class="skill-tag blue">C</span>
+      <span class="skill-tag blue">C++</span>
+      <span class="skill-tag blue">JavaScript</span>
+      <span class="skill-tag blue">HTML / CSS</span>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">
+        <span class="lang-ja">ツール・環境</span>
+        <span class="lang-en">Tools &amp; Environment</span>
+      </div>
+      <span class="skill-tag green">Git</span>
+      <span class="skill-tag green">GitHub</span>
+      <span class="skill-tag green">Linux</span>
+      <span class="skill-tag green">VS Code</span>
+      <span class="skill-tag green">LaTeX</span>
+      <span class="skill-tag green">MATLAB</span>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">
+        <span class="lang-ja">研究関連ツール</span>
+        <span class="lang-en">Research Tools</span>
+      </div>
+      <span class="skill-tag orange">Defects4J</span>
+      <span class="skill-tag orange">JUnit</span>
+      <span class="skill-tag orange">pytest</span>
+      <span class="skill-tag orange">LLM API</span>
+    </div>
+  </section>
+
+  <!-- Languages -->
+  <section id="languages">
+    <h2>
+      <span class="lang-ja">使用言語</span>
+      <span class="lang-en">Languages</span>
+    </h2>
+    <div class="lang-grid">
+      <div class="lang-item">
+        <span class="lang-name">中文 / Chinese</span>
+        <div class="lang-bar-bg"><div class="lang-bar-fill" data-pct="100"></div></div>
+        <span class="lang-level"><span class="lang-ja">母国語</span><span class="lang-en">Native</span></span>
+      </div>
+      <div class="lang-item">
+        <span class="lang-name">English</span>
+        <div class="lang-bar-bg"><div class="lang-bar-fill" data-pct="90"></div></div>
+        <span class="lang-level"><span class="lang-ja">完全なプロ</span><span class="lang-en">Full Professional</span></span>
+      </div>
+      <div class="lang-item">
+        <span class="lang-name">マレー語 / Malay</span>
+        <div class="lang-bar-bg"><div class="lang-bar-fill" data-pct="50"></div></div>
+        <span class="lang-level"><span class="lang-ja">限定的な実務</span><span class="lang-en">Limited Working</span></span>
+      </div>
+      <div class="lang-item">
+        <span class="lang-name">日本語 / Japanese</span>
+        <div class="lang-bar-bg"><div class="lang-bar-fill" data-pct="90"></div></div>
+        <span class="lang-level"><span class="lang-ja">完全なプロ (N1)</span><span class="lang-en">Full Professional (N1)</span></span>
+      </div>
+    </div>
   </section>
 
   <!-- Research -->
@@ -473,16 +604,34 @@
 </footer>
 
 <script>
+  /* ── Theme toggle ── */
   function toggleTheme() {
     const isDark = document.body.classList.toggle('dark');
     document.getElementById('themeBtn').textContent = isDark ? '☀️ Light' : '🌙 Dark';
   }
 
+  /* ── Language toggle ── */
   function toggleLang() {
     const isEn = document.body.classList.toggle('en');
     document.getElementById('langBtn').textContent = isEn ? 'JP' : 'EN';
     document.getElementById('htmlRoot').lang = isEn ? 'en' : 'ja';
   }
+
+  /* ── Fade-in on scroll ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+
+        /* Animate language bars when Languages section becomes visible */
+        entry.target.querySelectorAll('.lang-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.pct + '%';
+        });
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('section').forEach(s => observer.observe(s));
 </script>
 
 </body>
