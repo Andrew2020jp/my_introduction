@@ -7,18 +7,103 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root {
+      --bg: #f5f5f5;
+      --text: #333;
+      --card: #ffffff;
+      --heading: #1a1a2e;
+      --muted: #666;
+      --faint: #888;
+      --border: #eee;
+      --tag-bg: #f0f0f0;
+      --tag-text: #555;
+      --pub-bg: #fafafa;
+      --link-border: #ccc;
+      --link-hover-bg: #1a1a2e;
+      --link-hover-text: #ffffff;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #ddd;
+      --card: #1e1e2e;
+      --heading: #e6e6f0;
+      --muted: #aaa;
+      --faint: #999;
+      --border: #333;
+      --tag-bg: #2a2a3a;
+      --tag-text: #ccc;
+      --pub-bg: #252535;
+      --link-border: #555;
+      --link-hover-bg: #e6e6f0;
+      --link-hover-text: #121212;
+    }
+
     body {
       font-family: 'Segoe UI', 'Hiragino Sans', sans-serif;
-      background: #f5f5f5;
-      color: #333;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.7;
+      transition: background 0.3s, color 0.3s;
     }
+
+    #scrollProgress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, #e94560, #ff8e9e);
+      z-index: 100;
+    }
+
+    /* language toggle: default = Japanese */
+    body:not(.lang-en) .en { display: none !important; }
+    body.lang-en .ja { display: none !important; }
 
     header {
       background: #1a1a2e;
       color: white;
       padding: 60px 20px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header h1, header p { position: relative; z-index: 1; }
+
+    .controls {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .controls button {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      border-radius: 24px;
+      padding: 9px 20px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .controls button:hover { background: rgba(255,255,255,0.25); }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50%      { opacity: 1;   transform: scale(1.2); }
     }
 
     header h1 { font-size: 2.2rem; margin-bottom: 8px; }
@@ -47,16 +132,17 @@
     }
 
     section {
-      background: white;
+      background: var(--card);
       border-radius: 8px;
       padding: 32px;
       margin-bottom: 24px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: background 0.3s;
     }
 
     h2 {
       font-size: 1.2rem;
-      color: #1a1a2e;
+      color: var(--heading);
       border-left: 4px solid #e94560;
       padding-left: 12px;
       margin-bottom: 20px;
@@ -84,51 +170,51 @@
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .bio h3 { font-size: 1.4rem; margin-bottom: 4px; }
-    .bio .affil { color: #666; font-size: 0.9rem; margin-bottom: 12px; }
+    .bio .affil { color: var(--muted); font-size: 0.9rem; margin-bottom: 12px; }
     .bio p { font-size: 0.95rem; }
 
     .tag {
       display: inline-block;
-      background: #f0f0f0;
+      background: var(--tag-bg);
       border-radius: 4px;
       padding: 3px 10px;
       font-size: 0.82rem;
       margin: 3px 2px;
-      color: #555;
+      color: var(--tag-text);
     }
 
     table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
-    td { padding: 10px 6px; border-bottom: 1px solid #eee; vertical-align: top; }
-    td:first-child { width: 110px; color: #888; white-space: nowrap; }
+    td { padding: 10px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    td:first-child { width: 110px; color: var(--faint); white-space: nowrap; }
 
     .pub {
       border-left: 3px solid #e94560;
       padding: 10px 14px;
       margin-bottom: 14px;
-      background: #fafafa;
+      background: var(--pub-bg);
     }
     .pub .title { font-weight: bold; font-size: 0.95rem; }
-    .pub .venue { font-size: 0.85rem; color: #666; margin-top: 4px; }
+    .pub .venue { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
 
     .skill-group { margin-bottom: 18px; }
-    .skill-group h4 { font-size: 0.85rem; color: #888; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .skill-group h4 { font-size: 0.85rem; color: var(--faint); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
 
     .skill-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 0.9rem; }
     .skill-bar span:first-child { width: 120px; flex-shrink: 0; }
-    .bar-track { flex: 1; background: #eee; border-radius: 4px; height: 7px; }
+    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 7px; }
     .bar-fill { height: 7px; border-radius: 4px; background: #e94560; }
 
     .links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
     .links a {
-      color: #1a1a2e;
+      color: var(--heading);
       text-decoration: none;
       font-size: 0.9rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--link-border);
       padding: 6px 16px;
       border-radius: 4px;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
-    .links a:hover { background: #1a1a2e; color: white; }
+    .links a:hover { background: var(--link-hover-bg); color: var(--link-hover-text); }
 
     .icon-link {
       display: inline-flex;
@@ -141,11 +227,13 @@
       fill: currentColor;
     }
 
+    .email-link { color: var(--heading); }
+
     footer {
       text-align: center;
       padding: 30px;
       font-size: 0.82rem;
-      color: #aaa;
+      color: var(--faint);
     }
 
     @media (max-width: 560px) {
@@ -156,37 +244,58 @@
 </head>
 <body>
 
+<div id="scrollProgress"></div>
+
 <header>
+  <div class="controls">
+    <button id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button id="langToggle" aria-label="Toggle language">EN</button>
+  </div>
   <h1>Andrew Wong Wey Chee</h1>
-  <p>奈良先端科学技術大学院大学 (NAIST) &nbsp;|&nbsp; 修士課程</p>
+  <p>
+    <span class="ja">奈良先端科学技術大学院大学 (NAIST) &nbsp;|&nbsp; 修士課程</span>
+    <span class="en">Nara Institute of Science and Technology (NAIST) &nbsp;|&nbsp; Master's Student</span>
+  </p>
 </header>
 
 <nav>
   <a href="#about">About</a>
-  <a href="#education">学歴</a>
-  <a href="#research">研究</a>
-  <a href="#skills">スキル</a>
-  <a href="#publications">論文</a>
-  <a href="#awards">受賞</a>
-  <a href="#contact">連絡先</a>
+  <a href="#education"><span class="ja">学歴</span><span class="en">Education</span></a>
+  <a href="#research"><span class="ja">研究</span><span class="en">Research</span></a>
+  <a href="#skills"><span class="ja">スキル</span><span class="en">Skills</span></a>
+  <a href="#publications"><span class="ja">論文</span><span class="en">Publications</span></a>
+  <a href="#awards"><span class="ja">受賞</span><span class="en">Awards</span></a>
+  <a href="#contact"><span class="ja">連絡先</span><span class="en">Contact</span></a>
 </nav>
 
 <div class="container">
 
   <!-- About -->
   <section id="about">
-    <h2>About Me &nbsp; 自己紹介</h2>
+    <h2><span class="ja">About Me &nbsp; 自己紹介</span><span class="en">About Me</span></h2>
     <div class="profile-grid">
       <div class="avatar"><img src="profile.png" alt="Andrew Wong"></div>
       <div class="bio">
         <h3>Andrew Wong Wey Chee</h3>
         <div class="affil">
-          奈良先端科学技術大学院大学<br>
-          情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          <span class="ja">
+            奈良先端科学技術大学院大学<br>
+            情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          </span>
+          <span class="en">
+            Nara Institute of Science and Technology<br>
+            Division of Information Science, Master's Program &nbsp;|&nbsp; Software Engineering Lab
+          </span>
         </div>
         <p>
-          ソフトウェア工学と大規模言語モデル（LLM）の応用に興味を持っています。
-          特に、LLMを活用したコード解析・バグ検出・自動プログラム修復の研究に取り組んでいます。
+          <span class="ja">
+            ソフトウェア工学と大規模言語モデル（LLM）の応用に興味を持っています。
+            特に、LLMを活用したコード解析・バグ検出・自動プログラム修復の研究に取り組んでいます。
+          </span>
+          <span class="en">
+            I am interested in software engineering and applications of large language models (LLMs).
+            My research focuses on LLM-based code analysis, bug detection, and automatic program repair.
+          </span>
         </p>
         <div style="margin-top: 12px;">
           <span class="tag">Software Engineering</span>
@@ -200,74 +309,104 @@
 
   <!-- Education -->
   <section id="education">
-    <h2>学歴 Education</h2>
+    <h2><span class="ja">学歴 Education</span><span class="en">Education</span></h2>
     <table>
       <tr>
-        <td>2026/04 – 現在</td>
+        <td>2026/04 – <span class="ja">現在</span><span class="en">Present</span></td>
         <td>
-          <strong>奈良先端科学技術大学院大学（NAIST）</strong><br>
-          情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          <span class="ja">
+            <strong>奈良先端科学技術大学院大学（NAIST）</strong><br>
+            情報科学領域 修士課程 &nbsp;|&nbsp; ソフトウェア工学研究室
+          </span>
+          <span class="en">
+            <strong>Nara Institute of Science and Technology (NAIST)</strong><br>
+            Division of Information Science, Master's Program &nbsp;|&nbsp; Software Engineering Lab
+          </span>
         </td>
       </tr>
       <tr>
         <td>2022/04 – 2026/03</td>
         <td>
-          <strong>福井工業大学</strong><br> 
-          工学部 電気電子工学科 学士 &nbsp;|&nbsp; 大下研究室
+          <span class="ja">
+            <strong>福井工業大学</strong><br>
+            工学部 電気電子工学科 学士 &nbsp;|&nbsp; 大下研究室
+          </span>
+          <span class="en">
+            <strong>Fukui University of Technology</strong><br>
+            B.Eng., Department of Electrical and Electronic Engineering &nbsp;|&nbsp; Oshita Lab
+          </span>
         </td>
       </tr>
       <tr>
         <td>2020/10 – 2022/03</td>
         <td>
-          <strong>ABK学館日本語学校</strong><br>
-          一般課程（進学・就職・生活・資格取得等）
+          <span class="ja">
+            <strong>ABK学館日本語学校</strong><br>
+            一般課程（進学・就職・生活・資格取得等）
+          </span>
+          <span class="en">
+            <strong>ABK College (Japanese Language School)</strong><br>
+            General Course (further study, employment, daily life, qualifications)
+          </span>
         </td>
       </tr>
       <tr>
         <td>2017/01 – 2019/12</td>
         <td>
-          <strong>Jit Sin Independent High School</strong>（日新獨立中學）<br>
-          商業科（Business Stream）
+          <span class="ja">
+            <strong>Jit Sin Independent High School</strong>（日新獨立中學）<br>
+            商業科（Business Stream）
+          </span>
+          <span class="en">
+            <strong>Jit Sin Independent High School</strong><br>
+            Business Stream
+          </span>
         </td>
       </tr>
     </table>
-    <h2 style="margin-top: 24px;">資格 Qualifications</h2>
+    <h2 style="margin-top: 24px;"><span class="ja">資格 Qualifications</span><span class="en">Qualifications</span></h2>
     <table>
       <tr>
         <td>IT</td>
-        <td>基本情報技術者</td>
+        <td><span class="ja">基本情報技術者</span><span class="en">Fundamental Information Technology Engineer (FE)</span></td>
       </tr>
       <tr>
-        <td>英語</td>
+        <td><span class="ja">英語</span><span class="en">English</span></td>
         <td>TOEIC 805</td>
       </tr>
       <tr>
-        <td>日本語</td>
-        <td>日本語能力試験 N1</td>
+        <td><span class="ja">日本語</span><span class="en">Japanese</span></td>
+        <td><span class="ja">日本語能力試験 N1</span><span class="en">Japanese-Language Proficiency Test (JLPT) N1</span></td>
       </tr>
     </table>
   </section>
 
   <!-- Research -->
   <section id="research">
-    <h2>研究内容 Research</h2>
+    <h2><span class="ja">研究内容 Research</span><span class="en">Research</span></h2>
     <p>
-      大規模言語モデル（LLM）をソフトウェア工学タスクに応用する研究を行っています。
-      現在の主なテーマは以下の通りです：
+      <span class="ja">
+        大規模言語モデル（LLM）をソフトウェア工学タスクに応用する研究を行っています。
+        現在の主なテーマは以下の通りです：
+      </span>
+      <span class="en">
+        My research applies large language models (LLMs) to software engineering tasks.
+        Current main topics are:
+      </span>
     </p>
     <ul style="margin-top: 14px; padding-left: 20px; font-size: 0.95rem; line-height: 2;">
-      <li>LLMによる故障箇所の特定（Fault Localization）</li>
-      <li>入力順序がLLMの推論精度に与える影響</li>
-      <li>自動プログラム修復（Automatic Program Repair）</li>
+      <li><span class="ja">LLMによる故障箇所の特定（Fault Localization）</span><span class="en">Fault localization with LLMs</span></li>
+      <li><span class="ja">入力順序がLLMの推論精度に与える影響</span><span class="en">Impact of input order on LLM reasoning accuracy</span></li>
+      <li><span class="ja">自動プログラム修復（Automatic Program Repair）</span><span class="en">Automatic program repair</span></li>
     </ul>
   </section>
 
   <!-- Skills -->
   <section id="skills">
-    <h2>スキル Skills</h2>
+    <h2><span class="ja">スキル Skills</span><span class="en">Skills</span></h2>
 
     <div class="skill-group">
-      <h4>プログラミング言語</h4>
+      <h4><span class="ja">プログラミング言語</span><span class="en">Programming Languages</span></h4>
       <div class="skill-bar"><span>Python</span><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div></div>
       <div class="skill-bar"><span>JavaScript</span><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div></div>
       <div class="skill-bar"><span>C</span><div class="bar-track"><div class="bar-fill" style="width:55%"></div></div></div>
@@ -275,7 +414,7 @@
     </div>
 
     <div class="skill-group">
-      <h4>研究・開発ツール</h4>
+      <h4><span class="ja">研究・開発ツール</span><span class="en">Research &amp; Development Tools</span></h4>
       <div style="display:flex; flex-wrap:wrap; gap:8px; font-size:0.88rem;">
         <span class="tag">LLM API (Claude / OpenAI)</span>
         <span class="tag">Claude Code</span>
@@ -288,30 +427,43 @@
 
   <!-- Publications -->
   <section id="publications">
-    <h2>論文 Publications</h2>
+    <h2><span class="ja">論文 Publications</span><span class="en">Publications</span></h2>
     <div class="pub">
-      <div class="title">論文タイトル</div>
-      <div class="venue">会議名・雑誌名・年度</div>
+      <div class="title"><span class="ja">論文タイトル</span><span class="en">Paper Title</span></div>
+      <div class="venue"><span class="ja">会議名・雑誌名・年度</span><span class="en">Conference / Journal / Year</span></div>
     </div>
-    <p style="font-size: 0.88rem; color: #999;">※ 論文が出たら追加予定</p>
+    <p style="font-size: 0.88rem; color: #999;">
+      <span class="ja">※ 論文が出たら追加予定</span>
+      <span class="en">* To be added once published</span>
+    </p>
   </section>
 
   <!-- Awards -->
   <section id="awards">
-    <h2>受賞・奨学金 Awards &amp; Scholarships</h2>
+    <h2><span class="ja">受賞・奨学金 Awards &amp; Scholarships</span><span class="en">Awards &amp; Scholarships</span></h2>
     <table>
       <tr>
         <td>2025</td>
         <td>
-          <strong>電子情報通信学会 北陸支部 優秀学生賞</strong><br>
-          IEICE Hokuriku Branch Outstanding Student Award
+          <span class="ja">
+            <strong>電子情報通信学会 北陸支部 優秀学生賞</strong><br>
+            IEICE Hokuriku Branch Outstanding Student Award
+          </span>
+          <span class="en">
+            <strong>IEICE Hokuriku Branch Outstanding Student Award</strong>
+          </span>
         </td>
       </tr>
       <tr>
         <td>2025</td>
         <td>
-          <strong>ロータリー米山記念奨学金</strong><br>
-          Rotary Yoneyama Memorial Scholarship
+          <span class="ja">
+            <strong>ロータリー米山記念奨学金</strong><br>
+            Rotary Yoneyama Memorial Scholarship
+          </span>
+          <span class="en">
+            <strong>Rotary Yoneyama Memorial Scholarship</strong>
+          </span>
         </td>
       </tr>
     </table>
@@ -319,15 +471,15 @@
 
   <!-- Contact -->
   <section id="contact">
-    <h2>連絡先 Contact</h2>
+    <h2><span class="ja">連絡先 Contact</span><span class="en">Contact</span></h2>
     <table>
       <tr>
-        <td>メール</td>
-        <td><a href="mailto:andrew.wong_wey_chee.au4@naist.ac.jp" style="color:#1a1a2e;">andrew.wong_wey_chee.au4@naist.ac.jp</a></td>
+        <td><span class="ja">メール</span><span class="en">Email</span></td>
+        <td><a class="email-link" href="mailto:andrew.wong_wey_chee.au4@naist.ac.jp">andrew.wong_wey_chee.au4@naist.ac.jp</a></td>
       </tr>
       <tr>
-        <td>所属</td>
-        <td>奈良先端科学技術大学院大学</td>
+        <td><span class="ja">所属</span><span class="en">Affiliation</span></td>
+        <td><span class="ja">奈良先端科学技術大学院大学</span><span class="en">Nara Institute of Science and Technology</span></td>
       </tr>
     </table>
     <div class="links" style="margin-top: 20px;">
@@ -348,6 +500,57 @@
 <footer>
   &copy; 2026 Andrew Wong Wey Chee &nbsp;|&nbsp; NAIST
 </footer>
+
+<script>
+  // 星のエフェクト
+  const header = document.querySelector('header');
+  for (let i = 0; i < 40; i++) {
+    const star = document.createElement('span');
+    star.className = 'star';
+    const size = Math.random() * 2.5 + 1;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    header.appendChild(star);
+  }
+
+  // スクロールプログレスバー
+  const progressBar = document.getElementById('scrollProgress');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+  }, { passive: true });
+
+  // ダークモード切り替え（選択を記憶）
+  const themeToggle = document.getElementById('themeToggle');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = '☀️';
+  }
+  themeToggle.addEventListener('click', () => {
+    const dark = document.body.classList.toggle('dark');
+    themeToggle.textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  });
+
+  // 言語切り替え（選択を記憶）
+  const langToggle = document.getElementById('langToggle');
+  if (localStorage.getItem('lang') === 'en') {
+    document.body.classList.add('lang-en');
+    document.documentElement.lang = 'en';
+    langToggle.textContent = '日本語';
+  }
+  langToggle.addEventListener('click', () => {
+    const en = document.body.classList.toggle('lang-en');
+    document.documentElement.lang = en ? 'en' : 'ja';
+    langToggle.textContent = en ? '日本語' : 'EN';
+    localStorage.setItem('lang', en ? 'en' : 'ja');
+  });
+</script>
 
 </body>
 </html>
