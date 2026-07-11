@@ -289,19 +289,22 @@
         </div>
         <p>
           <span class="ja">
-            ソフトウェア工学と大規模言語モデル（LLM）の応用に興味を持っています。
-            特に、LLMを活用したコード解析・バグ検出・自動プログラム修復の研究に取り組んでいます。
+            ソフトウェア工学とAIエージェントの応用に興味を持っています。
+            現在は、オープンソースプロジェクトにおける設計判断文書（ADR）へのAIエージェントの関与を、
+            GitHub上のデータから定量的に明らかにする実証研究に取り組んでいます。
           </span>
           <span class="en">
-            I am interested in software engineering and applications of large language models (LLMs).
-            My research focuses on LLM-based code analysis, bug detection, and automatic program repair.
+            I am interested in software engineering and AI coding agents.
+            My current research empirically quantifies how AI agents are involved in
+            creating Architecture Decision Records (ADRs) in open-source projects on GitHub.
           </span>
         </p>
         <div style="margin-top: 12px;">
           <span class="tag">Software Engineering</span>
-          <span class="tag">LLM</span>
-          <span class="tag">Fault Localization</span>
-          <span class="tag">Program Repair</span>
+          <span class="tag">AI Agents</span>
+          <span class="tag">Empirical Study</span>
+          <span class="tag">Mining Software Repositories</span>
+          <span class="tag">ADR</span>
         </div>
       </div>
     </div>
@@ -384,21 +387,36 @@
   <!-- Research -->
   <section id="research">
     <h2><span class="ja">研究内容 Research</span><span class="en">Research</span></h2>
-    <p>
+    <p style="font-weight: bold; margin-bottom: 14px;">
       <span class="ja">
-        大規模言語モデル（LLM）をソフトウェア工学タスクに応用する研究を行っています。
-        現在の主なテーマは以下の通りです：
+        オープンソースプロジェクトにおけるAIエージェントのドキュメント作成への関与に関する実証研究
       </span>
       <span class="en">
-        My research applies large language models (LLMs) to software engineering tasks.
-        Current main topics are:
+        An Empirical Study of AI Involvement in Software Documentation on GitHub
       </span>
     </p>
-    <ul style="margin-top: 14px; padding-left: 20px; font-size: 0.95rem; line-height: 2;">
-      <li><span class="ja">LLMによる故障箇所の特定（Fault Localization）</span><span class="en">Fault localization with LLMs</span></li>
-      <li><span class="ja">入力順序がLLMの推論精度に与える影響</span><span class="en">Impact of input order on LLM reasoning accuracy</span></li>
-      <li><span class="ja">自動プログラム修復（Automatic Program Repair）</span><span class="en">Automatic program repair</span></li>
-    </ul>
+    <p style="font-size: 0.95rem;">
+      <span class="ja">
+        ソフトウェア開発の設計判断を記録する文書「ADR（Architecture Decision Record）」が、
+        Claude CodeやGitHub CopilotなどのAIエージェントによってどの程度作成されているかを、
+        GitHub上のデータから定量的に明らかにする研究を行っています。
+        自らGitHub APIで849リポジトリ・339ファイルを収集・分析するツールをPythonで開発し、
+        コミット履歴の共著情報からAIの関与を検出した結果、
+        実際のADRの約7割にAIの痕跡があることを世界で初めて定量化しました。
+        さらに「ツールごとに痕跡の残り方が異なるため、観測値は実態の下限である」という
+        分析上のバイアスを自ら特定・モデル化し、研究の方法論的貢献としています。
+      </span>
+      <span class="en">
+        I study how AI coding agents (Claude Code, GitHub Copilot, Cursor) are changing
+        the way developers document architectural decisions (ADRs) in open-source projects.
+        I built Python tools to mine 849 GitHub repositories and 339 ADR files,
+        detecting AI involvement through commit co-authorship metadata.
+        My analysis is the first to quantify that ~70% of real ADRs show AI traces,
+        and I identified a key measurement bias &mdash; different tools leave different traces,
+        so observed numbers are a lower bound &mdash; which became a core methodological
+        contribution of the study.
+      </span>
+    </p>
   </section>
 
   <!-- Skills -->
